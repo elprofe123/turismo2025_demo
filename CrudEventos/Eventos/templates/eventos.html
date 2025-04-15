@@ -1,0 +1,26 @@
+{% extends "base.html" %} 
+{% block content %}
+
+<h1>Eventos</h1> 
+
+{% for evento in eventos %}
+<div class="card mb-3" style="max-width: 540px">
+  <div class="row g-0">
+    <div class="col-md-4">
+      <img src="..." class="img-fluid rounded-start" alt="..." />
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <ul class="list-group">
+          <a class="list-group-item" href="{% url 'evento_detail' evento.id %}">
+            <header class="d-flex justify-content-between">
+              <h3 class="fw-bold">{{ evento.titulo }}</h3>
+            </header>
+          </a>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}
+{% endblock content %}
