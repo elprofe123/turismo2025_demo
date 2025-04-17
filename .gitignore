@@ -2,3 +2,8 @@ Include
 Scripts
 Lib
 pyvenv.cfg
+# .git-ignore
+venv/
+__pycache__/
+*.pyc
+.env
