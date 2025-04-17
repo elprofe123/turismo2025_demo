@@ -1,7 +1,6 @@
-{% extends "base.html" %} 
-{% block content %}
+{% extends "base.html" %} {% block content %}
 
-<h1>Eventos</h1> 
+<h1>Eventos</h1>
 
 {% for evento in eventos %}
 <div class="card mb-3" style="max-width: 540px">
@@ -16,11 +15,11 @@
             <header class="d-flex justify-content-between">
               <h3 class="fw-bold">{{ evento.titulo }}</h3>
             </header>
+            <p>{{evento.descripción }}</p>
           </a>
         </ul>
       </div>
     </div>
   </div>
 </div>
-{% endfor %}
-{% endblock content %}
+{% endfor %} {% endblock content %}

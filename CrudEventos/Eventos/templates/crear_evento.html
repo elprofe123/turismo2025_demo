@@ -1,15 +1,19 @@
 {% extends "base.html" %} {% block content%}
 <main class="container">
   <div class="row">
-    <div class="col-md-4 offset-md-4">
+    <div class="col-md-4 offset-md-4 text-center">
       <h1>Crear evento</h1>
 
       {{error}}
-      <form action="/eventos/crear" method="POST" class="card card-body mt-5">
-        {% csrf_token %}
-        {{form}}
-        <button class="btn btn-primary">Crear Evento</button>
+      <form id="formCrear" action="/eventos/crear" method="POST" class="card card-body mt-5">
+        {% csrf_token %} {{form}}
       </form>
+       <button
+          class="btn btn-primary mt-3"
+          id="btnCrear"
+        >
+          Crear Evento
+        </button>
     </div>
   </div>
 </main>

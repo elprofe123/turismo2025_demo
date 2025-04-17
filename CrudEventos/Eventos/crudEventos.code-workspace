@@ -1,11 +1,14 @@
 {
-	"folders": [
-		{
-			"path": "../.."
-		},
-		{
-			"path": "../../../crudDjangoauth"
-		}
-	],
-	"settings": {}
+  "folders": [
+    {
+      "path": "../.."
+    },
+    {
+      "path": "../../../crudDjangoauth"
+    },
+    {
+      "path": "../../../Portafolio"
+    }
+  ],
+  "settings": {}
 }

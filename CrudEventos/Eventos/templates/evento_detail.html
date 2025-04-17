@@ -1,10 +1,25 @@
-<form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button class="btn btn-primary">Actualizar</button>
-</form>
+{% extends "base.html" %} {% block content %}
+<div class="row">
+  <div class="col-md-4 offset-md-4 text-center">
+    <form method="POST">{% csrf_token %} {{ form.as_p }}</form>
+    <button
+      class="btn btn-primary"
+      type="button"
+      onClick="if (window.confirm('¿Estás seguro de que deseas actualizar este evento?')) { accionActualizar(); }"
+    >
+      Actualizar
+    </button>
+    <form action="{% url 'evento_delete' evento.id %}" method="POST">
+      {% csrf_token %}
+    </form>
+    <button
+      class="btn btn-danger"
+      type="button"
+      onClick="if (window.confirm('¿Estás seguro de que deseas eliminar este evento?')) { accionEliminar(); }"
+    >
+      Eliminar
+    </button>
+  </div>
+</div>
 
-
-<form action="{% url 'evento_delete' evento.id %}" method="POST">
-    {% csrf_token %}
-    <button class="btn btn-danger">Eliminar</button>
+{% endblock %}
