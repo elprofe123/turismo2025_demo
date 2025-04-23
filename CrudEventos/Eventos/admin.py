@@ -7,8 +7,7 @@ admin.site.register(Evento)
 
 
 class LogEntryAdmin(admin.ModelAdmin):
-    list_display = ('action_time', 'user', 'content_type', 'object_repr', 'action_flag')
+    list_display = ('user', 'action_time', 'content_type', 'object_repr', 'action_flag')
     list_filter = ('action_time', 'user', 'action_flag')
     search_fields = ('object_repr',)
-    
 site.register(LogEntry,LogEntryAdmin)
