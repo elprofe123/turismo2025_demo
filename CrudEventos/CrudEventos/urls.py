@@ -29,4 +29,6 @@ urlpatterns = [
     path('eventos/<int:evento_id>/eliminar',views.evento_delete,name='evento_delete'),
     path('login/',views.iniciar_sesion,name='login'),
     path('logout/',views.cerrar_sesion,name='logout'),
+    path('historial/',views.historial,name='historial'),
+    path('crear_usuario/',views.crear_usuario,name='crear_usuario')
 ]
