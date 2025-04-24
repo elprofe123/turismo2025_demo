@@ -6,7 +6,8 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.admin.models import LogEntry
 from django.contrib.admin.models import ADDITION, CHANGE, DELETION
 from django.contrib.contenttypes.models import ContentType
-from .utilidades import traducirActionFlag
+from .utilidades import  traducirActionFlag
+from django.shortcuts import get_object_or_404
 
 # Create your views here.
 
@@ -18,7 +19,12 @@ def home(request):
 
 
 def administrador(request):
-    return render(request, 'administrador.html')
+    eventos_pendientes = Evento.objects.filter(checked=False)  # Eventos no confirmados
+    eventos_confirmados = Evento.objects.filter(checked=True)  # Eventos confirmados
+    return render(request, 'administrador.html', {
+        'eventos_pendientes': eventos_pendientes,
+        'eventos_confirmados': eventos_confirmados
+    })
 
 # pagina de eventos
 
@@ -143,4 +149,13 @@ def historial(request):
 def crear_usuario(request):
     if request.method == 'GET':
         return render(request, 'crear_usuario.html', {
-        })
+})
+    
+
+def confirmar_evento(request, evento_id):
+    if request.method == 'POST' and request.user.is_authenticated:
+        evento = get_object_or_404(Evento, id=evento_id)
+        evento.checked = True  # Cambiar el estado a confirmado
+        evento.save()
+        return redirect('eventos')  # Redirigir a la lista de eventos
+    return redirect('login')  # Si no está autenticado, redirigir al login

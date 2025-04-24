@@ -1,8 +1,71 @@
 {% extends "base.html" %} {% block content %}
 
+{% if user.is_authenticated %}
+<h1>Eventos</h1>
+<div class="row">
+  <!-- Columna de eventos pendientes -->
+  <div class="col-md-6">
+    <h2>Pendientes</h2>
+    {% for evento in eventos %}
+    {% if not evento.checked %}
+    <div class="card mb-3" style="max-width: 540px">
+      <div class="row g-0">
+        <div class="col-md-4">
+          <img src="..." class="img-fluid rounded-start" alt="..." />
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <ul class="list-group">
+              <a class="list-group-item" href="{% url 'evento_detail' evento.id %}">
+                <header class="d-flex justify-content-between">
+                  <h3 class="fw-bold">{{ evento.titulo }}</h3>
+                </header>
+                <p>{{ evento.descripción }}</p>
+              </a>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+  </div>
+
+  <!-- Columna de eventos confirmados -->
+  <div class="col-md-6">
+    <h2>Confirmados</h2>
+    {% for evento in eventos %}
+    {% if evento.checked %}
+    <div class="card mb-3" style="max-width: 540px">
+      <div class="row g-0">
+        <div class="col-md-4">
+          <img src="..." class="img-fluid rounded-start" alt="..." />
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <ul class="list-group">
+              <a class="list-group-item" href="{% url 'evento_detail' evento.id %}">
+                <header class="d-flex justify-content-between">
+                  <h3 class="fw-bold">{{ evento.titulo }}</h3>
+                </header>
+                <p>{{ evento.descripción }}</p>
+              </a>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+{% else %}
 <h1>Eventos</h1>
 
 {% for evento in eventos %}
+{% if evento.checked %}
+
 <div class="card mb-3" style="max-width: 540px">
   <div class="row g-0">
     <div class="col-md-4">
@@ -22,4 +85,7 @@
     </div>
   </div>
 </div>
-{% endfor %} {% endblock content %}
+{% endif %}
+{% endfor %}
+{% endif %}
+{% endblock content %}

@@ -13,7 +13,7 @@ class Evento(models.Model):
     # Se relaciona con una tabla user proporcionada por django
     #user = models.ForeignKey(User, on_delete=models.CASCADE)
     #cuando se elimine la tabla usuario se eliminara tambien sus tareas-- eliminacion cascada
-
+    checked = models.BooleanField(default=False)
 
     def __str__(self):
         return self.titulo  # funcion que devuelve el titulo de la tarea y el usuario que la creo

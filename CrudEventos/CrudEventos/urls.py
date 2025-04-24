@@ -18,7 +18,6 @@ from django.contrib import admin
 from django.urls import path
 from Eventos import views
 
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',views.home,name='home'),
@@ -30,5 +29,6 @@ urlpatterns = [
     path('login/',views.iniciar_sesion,name='login'),
     path('logout/',views.cerrar_sesion,name='logout'),
     path('historial/',views.historial,name='historial'),
-    path('crear_usuario/',views.crear_usuario,name='crear_usuario')
+    path('crear_usuario/',views.crear_usuario,name='crear_usuario'),
+    path('eventos/confirmar/<int:evento_id>/', views.confirmar_evento, name='evento_confirmar'),
 ]
