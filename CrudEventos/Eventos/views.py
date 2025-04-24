@@ -6,7 +6,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.admin.models import LogEntry
 from django.contrib.admin.models import ADDITION, CHANGE, DELETION
 from django.contrib.contenttypes.models import ContentType
-from .utilidades import  traducirActionFlag
+from .utilidades import traducirActionFlag
 
 # Create your views here.
 
@@ -15,15 +15,21 @@ def home(request):
     return render(request, 'home.html')
 
 # pagina de administrador
+
+
 def administrador(request):
     return render(request, 'administrador.html')
 
 # pagina de eventos
+
+
 def eventos(request):
     eventos = Evento.objects.all()
     return render(request, 'eventos.html', {'eventos': eventos})
 
 # crear evento
+
+
 def crear_evento(request):
     if request.method == 'GET':
         return render(request, 'crear_evento.html', {
@@ -39,11 +45,12 @@ def crear_evento(request):
             # Registrar la acción en el historial
             LogEntry.objects.log_action(
                 user_id=request.user.id,  # Usuario que realiza la acción
-                content_type_id=ContentType.objects.get_for_model(new_task).pk,  # Tipo de contenido
+                content_type_id=ContentType.objects.get_for_model(
+                    new_task).pk,  # Tipo de contenido
                 object_id=new_task.id,  # ID del evento
                 object_repr=str(new_task),  # Representación del evento
                 action_flag=ADDITION,  # Acción: Añadido
-                change_message="Evento creado"  # Mensaje opcional
+                change_message="Evento Creado"  # Mensaje opcional
             )
             return redirect('eventos')
         except ValueError:
@@ -63,40 +70,40 @@ def evento_detail(request, evento_id):
         try:
             form = EventoForm(request.POST, instance=evento)
             form.save()
-            
+
             # Registrar la acción en el historial
             LogEntry.objects.log_action(
-            user_id=request.user.id,  
-            content_type_id=ContentType.objects.get_for_model(evento).pk, 
-            object_id=evento.id,  
-            object_repr=str(evento),  
-            action_flag=CHANGE,  
-            change_message="Evento modificado"  
+                user_id=request.user.id,
+                content_type_id=ContentType.objects.get_for_model(evento).pk,
+                object_id=evento.id,
+                object_repr=str(evento),
+                action_flag=CHANGE,
+                change_message="Evento Modificado"
             )
-
 
             return redirect('eventos')
         except ValueError:
             return render(request, 'evento_detail.html', {'form': form, 'evento': evento, 'error': 'Error al editar el evento'})
 
 # eliminar evento
+
+
 def evento_delete(request, evento_id):
     evento = Evento.objects.get(id=evento_id)
     if request.method == 'POST':
         # Registrar la acción en el historial
-         LogEntry.objects.log_action(
+        LogEntry.objects.log_action(
             user_id=request.user.id,  # Usuario que realiza la acción
             content_type_id=ContentType.objects.get_for_model(evento).pk,  # Tipo de contenido
             object_id=evento.id,  # ID del evento
             object_repr=str(evento),  # Representación del evento
             action_flag=DELETION,  # Acción: Añadido
-            change_message="Evento eliminado"  # Mensaje opcional
-            )
+            change_message="Evento Eliminado"  # Mensaje opcional
+        )
 
     evento.delete()
     return redirect('eventos')
 
-    
 
 # login
 def iniciar_sesion(request):
@@ -117,22 +124,23 @@ def iniciar_sesion(request):
             return redirect('administrador')
 
 # cerrar sesion
+
+
 def cerrar_sesion(request):
     logout(request)
     return redirect('home')
 
 
-
-#historial
+# historial
 def historial(request):
     historial = LogEntry.objects.all()
     for registro in historial:
         registro.traduccion = traducirActionFlag(registro.action_flag)
-    return render(request, 'historial.html' , {'historial': historial})
+    return render(request, 'historial.html', {'historial': historial})
 
 
-#crear usuario 
+# crear usuario
 def crear_usuario(request):
     if request.method == 'GET':
         return render(request, 'crear_usuario.html', {
-})
+        })
