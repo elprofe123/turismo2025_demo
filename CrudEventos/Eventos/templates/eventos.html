@@ -11,7 +11,11 @@
     <div class="card mb-3" style="max-width: 540px">
       <div class="row g-0">
         <div class="col-md-4">
-          <img src="..." class="img-fluid rounded-start" alt="..." />
+          {% if evento.imagen %}
+          <img src="{{evento.imagen.url}}" class="img-fluid rounded-start" alt="..." /> 
+          {% else %}
+          <p>No hay imagen disponible</p>
+          {% endif %}
         </div>
         <div class="col-md-8">
           <div class="card-body">
@@ -39,7 +43,11 @@
     <div class="card mb-3" style="max-width: 540px">
       <div class="row g-0">
         <div class="col-md-4">
-          <img src="..." class="img-fluid rounded-start" alt="..." />
+          {% if evento.imagen %}
+          <img src="{{evento.imagen.url}}" class="img-fluid rounded-start" alt="..." /> 
+          {% else %}
+          <p>No hay imagen disponible</p>
+          {% endif %}
         </div>
         <div class="col-md-8">
           <div class="card-body">
@@ -69,7 +77,11 @@
 <div class="card mb-3" style="max-width: 540px">
   <div class="row g-0">
     <div class="col-md-4">
-      <img src="..." class="img-fluid rounded-start" alt="..." />
+      {% if evento.imagen %}
+      <img src="{{evento.imagen.url}}" class="img-fluid rounded-start" alt="..." /> 
+      {% else %}
+      <p>No hay imagen disponible</p>
+      {% endif %}
     </div>
     <div class="col-md-8">
       <div class="card-body">

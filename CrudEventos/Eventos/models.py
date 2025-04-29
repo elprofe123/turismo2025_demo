@@ -14,6 +14,7 @@ class Evento(models.Model):
     #user = models.ForeignKey(User, on_delete=models.CASCADE)
     #cuando se elimine la tabla usuario se eliminara tambien sus tareas-- eliminacion cascada
     checked = models.BooleanField(default=False)
+    imagen =  models.ImageField(upload_to='imagenes/', blank=True, null=True)
 
     def __str__(self):
         return self.titulo  # funcion que devuelve el titulo de la tarea y el usuario que la creo

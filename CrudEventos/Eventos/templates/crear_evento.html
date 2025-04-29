@@ -5,7 +5,7 @@
       <h1>Crear evento</h1>
 
       {{error}}
-      <form id="formCrear" action="/eventos/crear" method="POST" class="card card-body mt-5">
+      <form id="formCrear" action="/eventos/crear" method="POST" class="card card-body mt-5" enctype="multipart/form-data">
         {% csrf_token %} {{form}}
       </form>
        <button
