@@ -1,0 +1,25 @@
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    width: 100%;
+    height: 100vh;
+    font-size: 16px;
+}
+
+nav{
+    background: linear-gradient(90deg, #950808 10%, #080C94 90%);
+}
+
+svg{
+    height: 50px;
+}
+
+footer{
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+}
