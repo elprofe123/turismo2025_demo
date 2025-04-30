@@ -18,8 +18,8 @@ svg{
     height: 50px;
 }
 
-footer{
+footer p{
     width: 100%;
-    position: absolute;
-    bottom: 0;
+    text-align: center;
+    font-weight: bold;
 }
