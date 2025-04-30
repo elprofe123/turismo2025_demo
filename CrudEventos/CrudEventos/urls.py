@@ -33,4 +33,7 @@ urlpatterns = [
     path('historial/',views.historial,name='historial'),
     path('crear_usuario/',views.crear_usuario,name='crear_usuario'),
     path('eventos/confirmar/<int:evento_id>/', views.confirmar_evento, name='evento_confirmar'),
+    path('eventos/confirmar/<int:evento_id>/eliminar', views.desconfirmar_evento, name='evento_desconfirmar'),
+    path('perfil/', views.perfil_usuario, name='perfil'),
+    path('perfil/<int:user_id>/eliminar', views.eliminar_perfil, name='eliminar_perfil'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

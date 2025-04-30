@@ -2,21 +2,24 @@
 {% block content %}
   {% if user.is_authenticated %} <!--pregunto si el usuario esta loguedo-->
   <!-- si lo esta le muestro el formulario para editar y eliminar-->
-    <div class="row">
-      <div class="col-md-4 offset-md-4 text-center">
-        <form method="POST">{% csrf_token %} {{ form.as_p }}</form>
-        <button
-          class="btn btn-primary"
+    <div class="row d-flex flex-column justify-content-center mt-3">
+      <div class="col-md-4 offset-md-4 text-center card card-body">
+        <form method="POST" class="mt-3">{% csrf_token %} {{ form.as_p }}
+
+          <button
+          class="btn btn-primary w-100"
           type="button"
           onClick="if (window.confirm('¿Estás seguro de que deseas actualizar este evento?')) { accionActualizar(); }"
         >
           Actualizar
         </button>
+        </form>
+       
         <form action="{% url 'evento_delete' evento.id %}" method="POST">
           {% csrf_token %}
         </form>
         <button
-          class="btn btn-danger"
+          class="btn btn-danger mt-3"
           type="button"
           onClick="if (window.confirm('¿Estás seguro de que deseas eliminar este evento?')) { accionEliminar(); }"
         >
@@ -26,13 +29,22 @@
         <form action="{% url 'evento_confirmar' evento.id %}" method="POST" class="mt-3">
           {% csrf_token %}
           <button
-            class="btn btn-success"
+            class="btn btn-success w-100"
             type="submit"
             onClick="return confirm('¿Estás seguro de que deseas confirmar este evento?');"
           >
             Confirmar Evento
           </button>
         </form>
+        {% else %}
+        <form action="{% url 'evento_desconfirmar' evento.id %}" method="POST" class="mt-3">
+          {% csrf_token %}
+          <button
+            class="btn btn-danger w-100"
+            type="submit"
+            onClick="return confirm('¿Estás seguro de que deseas desconfirmar este evento?');">
+            Desconfirmar Evento
+          </button>
         {% endif %}
       </div>
     </div>

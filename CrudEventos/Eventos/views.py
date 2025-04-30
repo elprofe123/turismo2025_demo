@@ -1,7 +1,8 @@
+from django.db import IntegrityError
 from django.shortcuts import render, redirect
 from .forms import EventoForm
-from .models import Evento
-from django.contrib.auth.forms import AuthenticationForm
+from .models import Evento, Perfil
+from django.contrib.auth.forms import AuthenticationForm,UserCreationForm, User
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.admin.models import LogEntry
 from django.contrib.admin.models import ADDITION, CHANGE, DELETION
@@ -110,7 +111,11 @@ def evento_delete(request, evento_id):
     evento.delete()
     return redirect('eventos')
 
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> b93771503ee64129cc768e400b9a515aa261b708
 # login
 def iniciar_sesion(request):
     if request.method == "GET":
@@ -137,7 +142,11 @@ def cerrar_sesion(request):
     return redirect('home')
 
 
+<<<<<<< HEAD
 # historial
+=======
+#historial
+>>>>>>> b93771503ee64129cc768e400b9a515aa261b708
 def historial(request):
     historial = LogEntry.objects.all()
     for registro in historial:
@@ -149,13 +158,88 @@ def historial(request):
 def crear_usuario(request):
     if request.method == 'GET':
         return render(request, 'crear_usuario.html', {
-})
-    
+            'form': UserCreationForm
+        })
+    else:
+        if request.POST['password1'] == request.POST['password2']:   
 
+            try:
+                user = User.objects.create_user(
+                        username=request.POST['username'], password=request.POST['password1'])
+                user.save()
+
+                 # Crear el perfil asociado
+                perfil = Perfil.objects.create(user=user)
+                if 'profile_picture' in request.FILES:
+                    perfil.imagen = request.FILES['profile_picture']
+                perfil.save()
+
+                login(request, user)  # para autenticar usuario
+                # usuario creado y se redirecciona a esta pagina
+                return redirect('perfil')
+            except IntegrityError:
+                # return HttpResponse('Username already exits') # usuario ya existente
+                return render(request, 'crear_usuario.html', {
+                    'form': UserCreationForm,
+                    'error': 'El usuario ya existe'
+                })
+        # contraseñas no coinciden
+        return render(request, 'crear_usuario.html', {
+            'form': UserCreationForm,
+            'error': 'Las contraseñas no coinciden'
+        })
+    
+# Confirmar evento
 def confirmar_evento(request, evento_id):
+     # Definir el código de acción para la confirmación
     if request.method == 'POST' and request.user.is_authenticated:
         evento = get_object_or_404(Evento, id=evento_id)
         evento.checked = True  # Cambiar el estado a confirmado
         evento.save()
+
+        LogEntry.objects.log_action(
+                user_id=request.user.id,  # Usuario que realiza la acción
+                content_type_id=ContentType.objects.get_for_model(evento).pk,  # Tipo de contenido
+                object_id=evento.id,  # ID del evento
+                object_repr=str(evento),  # Representación del evento
+                action_flag=CHANGE,  # Acción: Añadido
+                change_message="Evento confirmado"  # Mensaje opcional
+            )
         return redirect('eventos')  # Redirigir a la lista de eventos
     return redirect('login')  # Si no está autenticado, redirigir al login
+
+# desconfirmar evento
+def desconfirmar_evento(request,evento_id):
+    if request.method == 'POST' and request.user.is_authenticated:
+        evento = get_object_or_404(Evento,id=evento_id)
+        evento.checked = False
+        evento.save()
+
+        LogEntry.objects.log_action(
+                user_id=request.user.id,  # Usuario que realiza la acción
+                content_type_id=ContentType.objects.get_for_model(evento).pk,  # Tipo de contenido
+                object_id=evento.id,  # ID del evento
+                object_repr=str(evento),  # Representación del evento
+                action_flag=CHANGE,  # Acción: Añadido
+                change_message="Evento desconfirmado"  # Mensaje opcional
+            )
+        return redirect('eventos')  # Redirigir a la lista de eventos
+    return redirect('login')  # Si no está autenticado, redirigir al login
+
+
+# vista de perfil de usuario
+def perfil_usuario(request):
+    if request.method == 'GET':
+        perfil = Perfil.objects.filter(user=request.user).first() 
+        return render(request, 'perfil_usuario.html', {
+            'user': request.user,
+            'imagen': perfil.imagen.url if perfil and perfil.imagen else None
+        })
+
+
+def eliminar_perfil(request, user_id):
+    user = get_object_or_404(Perfil,user_id=user_id)
+    if request.method == 'POST':
+        #user = request.user
+        user.user.delete()
+        return redirect('home')  # Redirigir a la página de administrador después de eliminar el usuario
