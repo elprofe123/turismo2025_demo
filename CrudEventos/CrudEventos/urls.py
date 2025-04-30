@@ -34,4 +34,5 @@ urlpatterns = [
     path('crear_usuario/',views.crear_usuario,name='crear_usuario'),
     path('eventos/confirmar/<int:evento_id>/', views.confirmar_evento, name='evento_confirmar'),
     path('eventos/confirmar/<int:evento_id>/eliminar', views.desconfirmar_evento, name='evento_desconfirmar'),
+    path('perfil/', views.perfil_usuario, name='perfil'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

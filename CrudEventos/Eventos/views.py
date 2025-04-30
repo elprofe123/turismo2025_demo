@@ -1,7 +1,8 @@
+from django.db import IntegrityError
 from django.shortcuts import render, redirect
 from .forms import EventoForm
-from .models import Evento
-from django.contrib.auth.forms import AuthenticationForm
+from .models import Evento, Perfil
+from django.contrib.auth.forms import AuthenticationForm,UserCreationForm, User
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.admin.models import LogEntry
 from django.contrib.admin.models import ADDITION, CHANGE, DELETION
@@ -103,7 +104,6 @@ def evento_delete(request, evento_id):
     return redirect('eventos')
 
     
-
 # login
 def iniciar_sesion(request):
     if request.method == "GET":
@@ -128,7 +128,6 @@ def cerrar_sesion(request):
     return redirect('home')
 
 
-
 #historial
 def historial(request):
     historial = LogEntry.objects.all()
@@ -141,25 +140,36 @@ def historial(request):
 def crear_usuario(request):
     if request.method == 'GET':
         return render(request, 'crear_usuario.html', {
-            'form': AuthenticationForm
+            'form': UserCreationForm
         })
-    else:   
-        try:
-            user = authenticate(
-                request, username=request.POST['username'], password=request.POST['password'])
-            if user is None:
+    else:
+        if request.POST['password1'] == request.POST['password2']:   
+
+            try:
+                user = User.objects.create_user(
+                        username=request.POST['username'], password=request.POST['password1'])
+                user.save()
+
+                 # Crear el perfil asociado
+                perfil = Perfil.objects.create(user=user)
+                if 'profile_picture' in request.FILES:
+                    perfil.imagen = request.FILES['profile_picture']
+                perfil.save()
+
+                login(request, user)  # para autenticar usuario
+                # usuario creado y se redirecciona a esta pagina
+                return redirect('perfil')
+            except IntegrityError:
+                # return HttpResponse('Username already exits') # usuario ya existente
                 return render(request, 'crear_usuario.html', {
-                    'form': AuthenticationForm,
-                    'error': 'Usuario o Contraseña no encontrados'
+                    'form': UserCreationForm,
+                    'error': 'El usuario ya existe'
                 })
-            else:
-                login(request, user)
-                return redirect('administrador')
-        except ValueError:
-            return render(request, 'crear_usuario.html', {
-                'form': AuthenticationForm,
-                'error': 'Error al crear el usuario'
-})
+        # contraseñas no coinciden
+        return render(request, 'crear_usuario.html', {
+            'form': UserCreationForm,
+            'error': 'Las contraseñas no coinciden'
+        })
     
 # Confirmar evento
 def confirmar_evento(request, evento_id):
@@ -197,6 +207,16 @@ def desconfirmar_evento(request,evento_id):
             )
         return redirect('eventos')  # Redirigir a la lista de eventos
     return redirect('login')  # Si no está autenticado, redirigir al login
+
+
+# vista de perfil de usuario
+def perfil_usuario(request):
+    if request.method == 'GET':
+        perfil = Perfil.objects.filter(user=request.user).first() 
+        return render(request, 'perfil_usuario.html', {
+            'user': request.user,
+            'imagen': perfil.imagen.url if perfil and perfil.imagen else None
+        })
 
 
 
