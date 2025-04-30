@@ -44,7 +44,7 @@ def crear_evento(request):
     else:
         try:
             # guarda los datos en un nuevo formulario
-            form = EventoForm(request.POST)
+            form = EventoForm(request.POST,request.FILES)
             new_task = form.save(commit=False)  # para guardar la nueva tarea
             new_task.save()
 

@@ -17,6 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from Eventos import views
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -31,4 +33,4 @@ urlpatterns = [
     path('historial/',views.historial,name='historial'),
     path('crear_usuario/',views.crear_usuario,name='crear_usuario'),
     path('eventos/confirmar/<int:evento_id>/', views.confirmar_evento, name='evento_confirmar'),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

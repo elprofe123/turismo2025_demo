@@ -1,52 +1,59 @@
-{% extends "base.html" %} {% block content %}
-{% if user.is_authenticated %} <!--pregunto si el usuario esta loguedo-->
-<!-- si lo esta le muestro el formulario para editar y eliminar-->
-  <div class="row">
-    <div class="col-md-4 offset-md-4 text-center">
-      <form method="POST">{% csrf_token %} {{ form.as_p }}</form>
-      <button
-        class="btn btn-primary"
-        type="button"
-        onClick="if (window.confirm('¿Estás seguro de que deseas actualizar este evento?')) { accionActualizar(); }"
-      >
-        Actualizar
-      </button>
-      <form action="{% url 'evento_delete' evento.id %}" method="POST">
-        {% csrf_token %}
-      </form>
-      <button
-        class="btn btn-danger"
-        type="button"
-        onClick="if (window.confirm('¿Estás seguro de que deseas eliminar este evento?')) { accionEliminar(); }"
-      >
-        Eliminar
-      </button>
-      {% if not evento.checked %}
-      <form action="{% url 'evento_confirmar' evento.id %}" method="POST" class="mt-3">
-        {% csrf_token %}
+{% extends "base.html" %} 
+{% block content %}
+  {% if user.is_authenticated %} <!--pregunto si el usuario esta loguedo-->
+  <!-- si lo esta le muestro el formulario para editar y eliminar-->
+    <div class="row">
+      <div class="col-md-4 offset-md-4 text-center">
+        <form method="POST">{% csrf_token %} {{ form.as_p }}</form>
         <button
-          class="btn btn-success"
-          type="submit"
-          onClick="return confirm('¿Estás seguro de que deseas confirmar este evento?');"
+          class="btn btn-primary"
+          type="button"
+          onClick="if (window.confirm('¿Estás seguro de que deseas actualizar este evento?')) { accionActualizar(); }"
         >
-          Confirmar Evento
+          Actualizar
         </button>
-      </form>
-      {% endif %}
+        <form action="{% url 'evento_delete' evento.id %}" method="POST">
+          {% csrf_token %}
+        </form>
+        <button
+          class="btn btn-danger"
+          type="button"
+          onClick="if (window.confirm('¿Estás seguro de que deseas eliminar este evento?')) { accionEliminar(); }"
+        >
+          Eliminar
+        </button>
+        {% if not evento.checked %}
+        <form action="{% url 'evento_confirmar' evento.id %}" method="POST" class="mt-3">
+          {% csrf_token %}
+          <button
+            class="btn btn-success"
+            type="submit"
+            onClick="return confirm('¿Estás seguro de que deseas confirmar este evento?');"
+          >
+            Confirmar Evento
+          </button>
+        </form>
+        {% endif %}
+      </div>
     </div>
-  </div>
-{% else %} <!-- si no lo esta le muestro los detalles del el evento-->
-  
-  <div class="text-center">
-    <h1>{{ evento.titulo }}</h1>
-    <!-- <h3 class="my-5 h5">{{evento.date|date:'d M Y'}}</h3> -->
-    <!-- <img src="{{post.image.url}}" alt="{{post.title}}" /> -->
-    <div class="mg-4 img-fluid">
-      <p>{{evento.descripción|safe}}</p>
-      <!--truncatechars:100 para mostrar solo cien caracteres-->
+  {% else %} <!-- si no lo esta le muestro los detalles del el evento-->
+    
+    <div class="text-center">
+      <h1>{{ evento.titulo }}</h1>
+      <!-- <h3 class="my-5 h5">{{evento.date|date:'d M Y'}}</h3> -->
+      <div class=" mg-4 container img-fluid border border-2 rounded-3">
+        {% if evento.imagen %} <!-- si el evento tiene imagen -->
+          <img src="{{evento.imagen.url}}" alt="{{evento.title}}" class="img-fluid" / width="500px"> 
+        {% else %} <!-- si no tiene imagen -->
+          <p>No hay imagen disponible</p>
+        {% endif %}
+       <div class="container">
+        <h3 class="my-5 h5">descripción</h3>
+        <p>{{evento.descripción|safe}}</p>
+       </div>
+        <!--truncatechars:100 para mostrar solo cien caracteres-->
+      </div>
     </div>
-  </div>
-{% endif %} 
-
+  {% endif %} 
 
 {% endblock %}
