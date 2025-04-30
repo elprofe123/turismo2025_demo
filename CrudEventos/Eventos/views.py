@@ -111,11 +111,6 @@ def evento_delete(request, evento_id):
     evento.delete()
     return redirect('eventos')
 
-<<<<<<< HEAD
-
-=======
-    
->>>>>>> b93771503ee64129cc768e400b9a515aa261b708
 # login
 def iniciar_sesion(request):
     if request.method == "GET":
@@ -142,11 +137,7 @@ def cerrar_sesion(request):
     return redirect('home')
 
 
-<<<<<<< HEAD
 # historial
-=======
-#historial
->>>>>>> b93771503ee64129cc768e400b9a515aa261b708
 def historial(request):
     historial = LogEntry.objects.all()
     for registro in historial:
