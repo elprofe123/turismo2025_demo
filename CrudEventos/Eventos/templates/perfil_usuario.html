@@ -7,16 +7,18 @@
     }
 </style>
 
-<h1 class="text-center">Perfil de usaurio</h1>
+
 
 <main class="container">
-    <div class="row">
-       <div class="col-md-4 offset-md-4 d-flex flex-column align-items-center  border-custom">
+   
+    <div class="row mt-3">
+        <h1 class="text-center">Perfil de usaurio</h1>
+       <div class="col-md-4 offset-md-4 d-flex flex-column align-items-center  border-custom p-5 ">
         {% if imagen %}
             <img src="{{ imagen }}" alt="profile_photo" class="img-fluid rounded-circle" width="400px">
         {% else %}
-            <p>no hay foto</p>
-        <!-- <img src="https://via.placeholder.com/200 "alt="profile_photo" class="img-fluid rounded-circle" width="200px"> -->
+            
+            <img src="/media/imagenes/image_not_found.jpg" alt="profile_photo" class="img-fluid rounded-circle" width="200px">
         {% endif %}
 
         <p><strong>Nombre de usaurio:</strong>{{user.username}}</p>
@@ -24,9 +26,13 @@
 
         <div class="d-flex flex-column align-items-center mt-3">
             <button type="submit" class="btn btn-success mt-1">Guardar cambios</button>
-            <button type="submit" class="btn btn-danger mt-1">Eliminar usuario</button>
-            <a href="{% url 'administrador'%}" class="btn btn-primary mt-1 mb-3 w-100">Volver</a>
+            <form action="{% url 'eliminar_perfil' user.id %}" method="POST" class="mt-3">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger mt-1">Eliminar usuario</button>
+            </form>
+            
         </div>
+        <a href="{% url 'administrador'%}" class="btn btn-primary mt-1 mb-3 w-100">Volver</a>
        </div>
 
       

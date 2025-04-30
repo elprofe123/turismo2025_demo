@@ -219,5 +219,9 @@ def perfil_usuario(request):
         })
 
 
-
-    
+def eliminar_perfil(request, user_id):
+    user = get_object_or_404(Perfil,user_id=user_id)
+    if request.method == 'POST':
+        #user = request.user
+        user.user.delete()
+        return redirect('home')  # Redirigir a la página de administrador después de eliminar el usuario

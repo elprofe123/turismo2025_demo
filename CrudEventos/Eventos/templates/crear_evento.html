@@ -1,19 +1,21 @@
 {% extends "base.html" %} {% block content%}
 <main class="container">
   <div class="row">
-    <div class="col-md-4 offset-md-4 text-center">
+    <div class="col-md-4 offset-md-4 text-center px-0">
       <h1>Crear evento</h1>
 
       {{error}}
-      <form id="formCrear" action="/eventos/crear" method="POST" class="card card-body mt-5" enctype="multipart/form-data">
+      <form id="formCrear" action="/eventos/crear" method="POST" class="card card-body mt-5 " enctype="multipart/form-data">
         {% csrf_token %} {{form}}
-      </form>
-       <button
+        <button
           class="btn btn-primary mt-3"
           id="btnCrear"
         >
           Crear Evento
         </button>
+        <a href="{% url 'administrador' %}" class="btn btn-danger mt-3">Volver</a>
+      </form>
+       
     </div>
   </div>
 </main>
