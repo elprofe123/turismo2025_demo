@@ -4,4 +4,8 @@
 <h1>Crear usario</h1>
 <p>Pagina para crear usuario</p>
 <p> En construccion</p>
+<form action="{% url 'crear_usuario' %}" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Crear usuario</button>
 {%endblock%}

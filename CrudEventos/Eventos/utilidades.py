@@ -12,6 +12,8 @@ def traducirActionFlag(flag):
         return "Modificado"
     elif flag == 3:
         return "Borrado"
+    elif flag == 4:
+        return "Confirmado"
     return "Acción desconocida"
 
 

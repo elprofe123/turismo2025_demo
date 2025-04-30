@@ -141,13 +141,63 @@ def historial(request):
 def crear_usuario(request):
     if request.method == 'GET':
         return render(request, 'crear_usuario.html', {
+            'form': AuthenticationForm
+        })
+    else:   
+        try:
+            user = authenticate(
+                request, username=request.POST['username'], password=request.POST['password'])
+            if user is None:
+                return render(request, 'crear_usuario.html', {
+                    'form': AuthenticationForm,
+                    'error': 'Usuario o Contraseña no encontrados'
+                })
+            else:
+                login(request, user)
+                return redirect('administrador')
+        except ValueError:
+            return render(request, 'crear_usuario.html', {
+                'form': AuthenticationForm,
+                'error': 'Error al crear el usuario'
 })
     
-
+# Confirmar evento
 def confirmar_evento(request, evento_id):
+     # Definir el código de acción para la confirmación
     if request.method == 'POST' and request.user.is_authenticated:
         evento = get_object_or_404(Evento, id=evento_id)
         evento.checked = True  # Cambiar el estado a confirmado
         evento.save()
+
+        LogEntry.objects.log_action(
+                user_id=request.user.id,  # Usuario que realiza la acción
+                content_type_id=ContentType.objects.get_for_model(evento).pk,  # Tipo de contenido
+                object_id=evento.id,  # ID del evento
+                object_repr=str(evento),  # Representación del evento
+                action_flag=CHANGE,  # Acción: Añadido
+                change_message="Evento confirmado"  # Mensaje opcional
+            )
         return redirect('eventos')  # Redirigir a la lista de eventos
     return redirect('login')  # Si no está autenticado, redirigir al login
+
+# desconfirmar evento
+def desconfirmar_evento(request,evento_id):
+    if request.method == 'POST' and request.user.is_authenticated:
+        evento = get_object_or_404(Evento,id=evento_id)
+        evento.checked = False
+        evento.save()
+
+        LogEntry.objects.log_action(
+                user_id=request.user.id,  # Usuario que realiza la acción
+                content_type_id=ContentType.objects.get_for_model(evento).pk,  # Tipo de contenido
+                object_id=evento.id,  # ID del evento
+                object_repr=str(evento),  # Representación del evento
+                action_flag=CHANGE,  # Acción: Añadido
+                change_message="Evento desconfirmado"  # Mensaje opcional
+            )
+        return redirect('eventos')  # Redirigir a la lista de eventos
+    return redirect('login')  # Si no está autenticado, redirigir al login
+
+
+
+    

@@ -33,6 +33,15 @@
             Confirmar Evento
           </button>
         </form>
+        {% else %}
+        <form action="{% url 'evento_desconfirmar' evento.id %}" method="POST" class="mt-3">
+          {% csrf_token %}
+          <button
+            class="btn btn-danger"
+            type="submit"
+            onClick="return confirm('¿Estás seguro de que deseas desconfirmar este evento?');">
+            Desconfirmar Evento
+          </button>
         {% endif %}
       </div>
     </div>
