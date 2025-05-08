@@ -1,9 +1,10 @@
 from django.contrib import admin
-from .models import Evento,Perfil
+from .models import Evento,Perfil,Categoria
 from django.contrib.admin.models import LogEntry
 from django.contrib.admin import site 
 # Register your models here.
 admin.site.register(Evento)
+admin.site.register(Categoria)
 
 
 class LogEntryAdmin(admin.ModelAdmin):
