@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.admin.models import LogEntry
 from django.contrib import admin
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 
@@ -32,8 +32,15 @@ class Evento(models.Model):
     def __str__(self):
         return self.titulo  # funcion que devuelve el titulo de la tarea y el usuario que la creo
 
+class CustomUser(AbstractUser):
+    email = models.EmailField(unique=True)  # Campo email único y obligatorio
+    profile_picture = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
+
+    def __str__(self):
+        return self.username
+
 class Perfil(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     # Otros campos adicionales para el perfil del usuario
     # Por ejemplo, puedes agregar un campo de imagen de perfil
     imagen = models.ImageField(upload_to='perfiles/', blank=True, null=True)

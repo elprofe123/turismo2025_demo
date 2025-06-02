@@ -121,25 +121,19 @@
             text-align: center;
         }
     </style>
-</head>
-<body>
     <div class="login-container">
         <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logo%20sgo.jpg-DInYvJYeWK21buuS4rXWgvbNLriJcc.jpeg" alt="Santiago del Estero Logo" class="logo">
         <h1>Iniciar Sesión</h1>
         <p class="error">{{error}}</p>
         <form action="/login/" method="POST">
             {% csrf_token %}
-            <label for="username">Usuario</label>
-            <input type="text" id="username" name="username" required placeholder="Escribe tu usuario">
-            
+            <label for="username">Usuario o Email</label>
+            <input type="text" id="username" name="username" required placeholder="Usuario o Email">
             <label for="password">Contraseña</label>
-            <input type="password" id="password" name="password" required placeholder="Escribe tu contraseña">
-            
-            <button type="submit">Ingresar</button>
+            <input type="password" id="password" name="password" required placeholder="Contraseña">
+            <button type="submit" class="btn btn-primary mt-3">Ingresar</button>
         </form>
-        <!--<a href="#" class="forgot-password">¿Olvidaste tu contraseña?</a> -->
-        
+        <!-- <a href="#" class="forgot-password">¿Olvidaste tu contraseña?</a> -->
     </div>
-</body>
-{%endblock %}
+{% endblock %}
 </html>

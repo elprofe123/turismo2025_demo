@@ -51,16 +51,18 @@
                     {% csrf_token %}
 
                    
+                    <!-- Solo el bloque relevante para la imagen de perfil -->
                     <div class="mb-3 text-center">
                         <label for="profile_picture" class="profile-picture-label">
-                            <div class="profile-picture-wrapper">
-                                <i class="fas fa-user-circle profile-icon"></i>
+                            <div class="profile-picture-wrapper" id="profile_wrapper">
+                                <i class="fas fa-user-circle profile-icon" id="profile_icon"></i>
                                 <i class="fas fa-camera camera-icon"></i>
                             </div>
                             <input
                                 type="file"
                                 name="profile_picture"
                                 id="profile_picture"
+                                accept="image/*"
                                 class="form-control d-none"
                             />
                         </label>
@@ -99,6 +101,17 @@
                             placeholder="Confirma tu contraseña"
                         />
                     </div>
+                    <div class="mb-3">
+                        <label for="email">Email:</label>
+                        <input
+                            type="email"
+                            name="email"
+                            id="email"
+                            class="form-control"
+                            placeholder="Escribe tu email"
+                            required
+                        />
+                    </div>
                     <button type="submit" class="btn btn-primary" onClick="return confirm('¿Estás seguro de que deseas crear este usaurio?');">Crear usuario</button>
                     <a href="{% url 'administrador' %}" class="btn btn-danger mt-3">Volver</a>
                     {{error}}
@@ -107,5 +120,28 @@
         </div>
     </div>
 </main>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const input = document.getElementById('profile_picture');
+    const wrapper = document.getElementById('profile_wrapper');
+    const icon = document.getElementById('profile_icon');
+
+    if (input && wrapper && icon) {
+        input.addEventListener('change', function() {
+            const [file] = input.files;
+            if (file) {
+                wrapper.style.backgroundImage = `url(${URL.createObjectURL(file)})`;
+                wrapper.style.backgroundSize = 'cover';
+                wrapper.style.backgroundPosition = 'center';
+                icon.style.display = 'none';
+            } else {
+                wrapper.style.backgroundImage = '';
+                icon.style.display = 'block';
+            }
+        });
+    }
+});
+</script>
 
 {%endblock%}

@@ -1,7 +1,7 @@
 from django.db import IntegrityError
 from django.shortcuts import render, redirect
 from .forms import EventoForm
-from .models import Categoria, Evento, Perfil
+from .models import Categoria, Evento, Perfil, CustomUser
 from django.contrib.auth.forms import AuthenticationForm,UserCreationForm, User
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.admin.models import LogEntry
@@ -114,16 +114,27 @@ def evento_delete(request, evento_id):
 # login
 def iniciar_sesion(request):
     if request.method == "GET":
-        return render(request, 'login.html', {
-            'form': AuthenticationForm
-        })
+        return render(request, 'login.html')
     else:
-        user = authenticate(
-            request, username=request.POST['username'], password=request.POST['password'])
+        login_input = request.POST['username']
+        password = request.POST['password']
+
+        # Buscar por email si contiene '@', si no por username
+        if '@' in login_input:
+            try:
+                user_obj = CustomUser.objects.get(email=login_input)
+                username = user_obj.username
+            except CustomUser.DoesNotExist:
+                return render(request, 'login.html', {
+                    'error': 'Usuario o contraseña incorrectos'
+                })
+        else:
+            username = login_input
+
+        user = authenticate(request, username=username, password=password)
         if user is None:
             return render(request, 'login.html', {
-                'form': AuthenticationForm,
-                'error': 'Usuario o Contraseña no encontrados'
+                'error': 'Usuario o contraseña incorrectos'
             })
         else:
             login(request, user)
@@ -152,29 +163,27 @@ def crear_usuario(request):
             'form': UserCreationForm
         })
     else:
-        if request.POST['password1'] == request.POST['password2']:   
-
+        if request.POST['password1'] == request.POST['password2']:
             try:
-                user = User.objects.create_user(
-                        username=request.POST['username'], password=request.POST['password1'])
+                user = CustomUser.objects.create_user(
+                    username=request.POST['username'],
+                    password=request.POST['password1'],
+                    email=request.POST.get('email', '')  # Si tienes campo email en el formulario
+                )
                 user.save()
 
-                 # Crear el perfil asociado
                 perfil = Perfil.objects.create(user=user)
                 if 'profile_picture' in request.FILES:
                     perfil.imagen = request.FILES['profile_picture']
                 perfil.save()
 
-                login(request, user)  # para autenticar usuario
-                # usuario creado y se redirecciona a esta pagina
+                login(request, user)
                 return redirect('perfil')
             except IntegrityError:
-                # return HttpResponse('Username already exits') # usuario ya existente
                 return render(request, 'crear_usuario.html', {
                     'form': UserCreationForm,
                     'error': 'El usuario ya existe'
                 })
-        # contraseñas no coinciden
         return render(request, 'crear_usuario.html', {
             'form': UserCreationForm,
             'error': 'Las contraseñas no coinciden'
